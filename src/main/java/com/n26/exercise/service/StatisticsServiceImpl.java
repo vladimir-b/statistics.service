@@ -11,21 +11,38 @@ import java.util.*;
 
 /**
  * Created by Vladimir on 12/2/2016.
+ * Threadsafe statistics service implementation.
+ * Calculate statistics upon receiving transactions.
+ * Statistics is periodically updated in case if no transactions happen withing last 60 seconds.
  */
 @Component
 public class StatisticsServiceImpl implements StatisticsService {
     private Statistics currentStatistics = new Statistics();
     final private ArrayList<Transaction> transactions = new ArrayList<>();
 
+    /**
+     * Time to leave for transaction in statistics.
+     */
     @Value("${statistics.service.ttl}")
     @VisibleForTesting
     private int ttl;
 
+    /**
+     * Return transaction statistics for the last 60 seconds.
+     * Statistics is calculated in advance. Methods work in O(1).
+     * @param currentTime Current time provided by caller.
+     * @return pre calculated statistics.
+     */
     @Override
     public synchronized Statistics getCurrentStatistics(long currentTime) {
        return currentStatistics;
     }
 
+    /**
+     * Add transaction and update statistics correspondingly.
+     * @param transaction to add to statistics.
+     * @param currentTime Current time provided by caller.
+     */
     @Override
     public synchronized void transactions(Transaction transaction, long currentTime) {
         if (currentTime < transaction.getTimestamp()) {
@@ -42,7 +59,10 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
     }
 
-    @Scheduled(fixedRate = 5000)
+    /**
+     * Update statistics every half second in case if no transactions were happened.
+     */
+    @Scheduled(fixedRate = 500)
     public synchronized void statisticsPeriodicalUpdate() {
         updateStatistics(System.currentTimeMillis() - ttl);
     }
