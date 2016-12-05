@@ -62,4 +62,16 @@ public class Statistics {
     public long getCount() {
         return count;
     }
+
+    @Override
+    public String toString() {
+        return "Statistics{" +
+                "sum=" + sum +
+                ", avg=" + avg +
+                ", max=" + max +
+                ", min=" + min +
+                ", count=" + count +
+                ", minTimestamp=" + minTimestamp +
+                '}';
+    }
 }

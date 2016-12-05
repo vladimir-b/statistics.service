@@ -23,4 +23,12 @@ public class Transaction {
     public long getTimestamp() {
         return timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "amount=" + amount +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

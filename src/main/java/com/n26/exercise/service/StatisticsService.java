@@ -4,8 +4,8 @@ import com.n26.exercise.model.Statistics;
 import com.n26.exercise.model.Transaction;
 
 /**
- * Basic interface for updating and receiving statistics.
  * Created by Vladimir on 12/4/2016.
+ * Basic interface for updating and receiving statistics.
  */
 public interface StatisticsService {
     /**

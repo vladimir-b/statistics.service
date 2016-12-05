@@ -6,6 +6,8 @@ import com.n26.exercise.model.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -17,8 +19,9 @@ import java.util.*;
  */
 @Component
 public class StatisticsServiceImpl implements StatisticsService {
+    private static final Logger logger = LogManager.getLogger(StatisticsServiceImpl.class);
     private Statistics currentStatistics = new Statistics();
-    final private ArrayList<Transaction> transactions = new ArrayList<>();
+    private final ArrayList<Transaction> transactions = new ArrayList<>();
 
     /**
      * Time to leave for transaction in statistics.
@@ -45,8 +48,13 @@ public class StatisticsServiceImpl implements StatisticsService {
      */
     @Override
     public synchronized void transactions(Transaction transaction, long currentTime) {
+        logger.trace("Transaction received: " + transaction);
+
         if (currentTime < transaction.getTimestamp()) {
-            throw new IllegalArgumentException("Transaction timestamp is bigger than current time.");
+            String message = "Transaction timestamp is bigger than current time.";
+            logger.error(message);
+
+            throw new IllegalArgumentException(message);
         }
 
         final long threshold = currentTime - ttl;
@@ -55,6 +63,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             if (!updateStatistics(threshold)) {
                 addTransaction(currentStatistics, transaction);
+
+                logger.trace("Statistic updated: " + currentStatistics);
             }
         }
     }
@@ -74,6 +84,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     protected boolean updateStatistics(long threshold) {
         if (currentStatistics.getMinTimestamp() < threshold) {
             calculateStatistics(threshold);
+            logger.trace("Statistic fully recalculated: " + currentStatistics);
+
             return true;
         }
         return false;
