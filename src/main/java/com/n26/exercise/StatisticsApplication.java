@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class TransactionApplication {
+public class StatisticsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TransactionApplication.class, args);
+		SpringApplication.run(StatisticsApplication.class, args);
 	}
 }

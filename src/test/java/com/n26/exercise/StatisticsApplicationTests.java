@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TransactionApplicationTests {
+public class StatisticsApplicationTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
