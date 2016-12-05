@@ -1,7 +1,6 @@
 package com.n26.exercise.resource;
 
-// import org.springframework.beans.TypeMismatchException;
-//import org.springframework.validation.BindException;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 /**
  * Created by Vladimir on 12/4/2016.
@@ -20,6 +19,8 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({
             IllegalArgumentException.class,
     })
-    @ResponseStatus(NO_CONTENT)
-    public void handleException(Exception e, HttpServletRequest request) {}
+    @ResponseStatus(BAD_REQUEST)
+    public Object handleException(Exception e, HttpServletRequest request) {
+       return ImmutableMap.of("message", e.getMessage());
+    }
 }

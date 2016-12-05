@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -24,14 +29,15 @@ public class StatisticsController {
     StatisticsService statisticsService;
 
    @RequestMapping(method=GET, path="/statistics")
-   @ResponseStatus(HttpStatus.OK)
+   @ResponseStatus(OK)
     public Statistics statistics() {
         return statisticsService.getCurrentStatistics(System.currentTimeMillis());
     }
 
     @RequestMapping(method=POST, path="/transactions")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void transactions(@RequestBody Transaction transaction) {
-        statisticsService.transactions(transaction, System.currentTimeMillis());
+    public void transactions(@RequestBody Transaction transaction, HttpServletResponse response) {
+        response.setStatus(
+            statisticsService.transactions(transaction, System.currentTimeMillis()) ?
+                    CREATED.value() : NO_CONTENT.value());
     }
 }

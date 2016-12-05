@@ -67,6 +67,18 @@ public class StatisticsApplicationTests {
 		.when()
 			.post("/transactions")
 		.then()
-			.statusCode(HttpStatus.NO_CONTENT.value());
+			.statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void addExpiredTransaction() {
+		given()
+				.port(randomServerPort)
+				.contentType("application/json")
+				.body(new Transaction(11.1,  System.currentTimeMillis() - 100 * 1000))
+				.when()
+				.post("/transactions")
+				.then()
+				.statusCode(HttpStatus.NO_CONTENT.value());
 	}
 }

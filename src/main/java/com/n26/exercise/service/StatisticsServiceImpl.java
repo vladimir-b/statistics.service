@@ -45,9 +45,10 @@ public class StatisticsServiceImpl implements StatisticsService {
      * Add transaction and update statistics correspondingly.
      * @param transaction to add to statistics.
      * @param currentTime Current time provided by caller.
+     * @return true if transaction is within ttl range.
      */
     @Override
-    public synchronized void transactions(Transaction transaction, long currentTime) {
+    public synchronized boolean transactions(Transaction transaction, long currentTime) {
         logger.trace("Transaction received: " + transaction);
 
         if (currentTime < transaction.getTimestamp()) {
@@ -66,7 +67,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
                 logger.trace("Statistic updated: " + currentStatistics);
             }
+            return true;
         }
+        return false;
     }
 
     /**

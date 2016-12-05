@@ -20,6 +20,7 @@ public interface StatisticsService {
      * Add transaction and update statistics correspondingly.
      * @param transaction to add to statistics.
      * @param currentTime Current time provided by caller.
+     * @return true if transaction is within ttl range.
      */
-    void transactions(Transaction transaction, long currentTime);
+    boolean transactions(Transaction transaction, long currentTime);
 }
