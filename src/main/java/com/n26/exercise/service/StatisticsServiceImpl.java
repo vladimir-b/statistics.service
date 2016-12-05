@@ -22,7 +22,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private int ttl;
 
     @Override
-    public Statistics getCurrentStatistics(long currentTime) {
+    public synchronized Statistics getCurrentStatistics(long currentTime) {
        return currentStatistics;
     }
 
@@ -43,7 +43,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Scheduled(fixedRate = 5000)
-    public void statisticsPeriodicalUpdate() {
+    public synchronized void statisticsPeriodicalUpdate() {
         updateStatistics(System.currentTimeMillis() - ttl);
     }
 
@@ -51,7 +51,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         this.ttl = ttl;
     }
 
-    protected synchronized boolean updateStatistics(long threshold) {
+    protected boolean updateStatistics(long threshold) {
         if (currentStatistics.getMinTimestamp() < threshold) {
             calculateStatistics(threshold);
             return true;
