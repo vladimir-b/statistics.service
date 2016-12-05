@@ -8,7 +8,6 @@ public class Transaction {
     private long timestamp;
 
     public Transaction() {
-        this(0, 0);
     }
 
     public Transaction(double amount, long timestamp) {
