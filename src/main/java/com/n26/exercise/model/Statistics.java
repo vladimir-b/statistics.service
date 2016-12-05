@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Statistics {
     private double sum;
     private double avg;
-    private double max;
-    private double min;
+    private Double max;
+    private Double min;
     private long count;
 
     @JsonIgnore
@@ -31,11 +31,11 @@ public class Statistics {
         this.avg = avg;
     }
 
-    public void setMax(double max) {
+    public void setMax(Double max) {
         this.max = max;
     }
 
-    public void setMin(double min) {
+    public void setMin(Double min) {
         this.min = min;
     }
 
@@ -51,11 +51,11 @@ public class Statistics {
         return avg;
     }
 
-    public double getMax() {
+    public Double getMax() {
         return max;
     }
 
-    public double getMin() {
+    public Double getMin() {
         return min;
     }
 

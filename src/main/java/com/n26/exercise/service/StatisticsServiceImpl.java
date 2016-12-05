@@ -1,5 +1,6 @@
 package com.n26.exercise.service;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.n26.exercise.model.Statistics;
 import com.n26.exercise.model.Transaction;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +18,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     final private ArrayList<Transaction> transactions = new ArrayList<>();
 
     @Value("${statistics.service.ttl}")
- //   @VisibleForTesting
+    @VisibleForTesting
     private int ttl;
-
 
     @Override
     public Statistics getCurrentStatistics(long currentTime) {
@@ -27,7 +27,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public void transactions(Transaction transaction, long currentTime) {
+    public synchronized void transactions(Transaction transaction, long currentTime) {
         if (currentTime < transaction.getTimestamp()) {
             throw new IllegalArgumentException("Transaction timestamp is bigger than current time.");
         }
@@ -41,12 +41,17 @@ public class StatisticsServiceImpl implements StatisticsService {
             }
         }
     }
+
     @Scheduled(fixedRate = 5000)
     public void statisticsPeriodicalUpdate() {
-        updateStatistics(System.currentTimeMillis());
+        updateStatistics(System.currentTimeMillis() - ttl);
     }
 
-    protected boolean updateStatistics(long threshold) {
+    protected void setTtl(int ttl) {
+        this.ttl = ttl;
+    }
+
+    protected synchronized boolean updateStatistics(long threshold) {
         if (currentStatistics.getMinTimestamp() < threshold) {
             calculateStatistics(threshold);
             return true;
@@ -66,11 +71,11 @@ public class StatisticsServiceImpl implements StatisticsService {
         double amount = transaction.getAmount();
 
         statistics.setSum(statistics.getSum() + amount);
-        if (statistics.getMax() < amount) {
+        if (statistics.getMax() == null || statistics.getMax() < amount) {
             statistics.setMax(amount);
         }
 
-        if (statistics.getMin() > amount) {
+        if (statistics.getMin() == null || statistics.getMin() > amount) {
             statistics.setMin(amount);
         }
 
