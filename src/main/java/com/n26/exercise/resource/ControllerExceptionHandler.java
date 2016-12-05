@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 /**
  * Created by Vladimir on 12/4/2016.
@@ -18,15 +18,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @ResponseBody
 public class ControllerExceptionHandler {
     @ExceptionHandler({
-           //BindException.class,
             IllegalArgumentException.class,
-           // InvalidParamException.class,
-          //  MissingServletRequestParameterException.class,
-          //  ServletRequestBindingException.class,
-      //      TypeMismatchException.class
     })
-    @ResponseStatus(BAD_REQUEST)
-    public /*SimpleResponseError*/ Object handleException(Exception e, HttpServletRequest request) {
-        return null;
-    }
+    @ResponseStatus(NO_CONTENT)
+    public void handleException(Exception e, HttpServletRequest request) {}
 }

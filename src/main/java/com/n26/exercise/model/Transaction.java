@@ -7,7 +7,11 @@ public class Transaction {
     private double amount;
     private long timestamp;
 
-    public Transaction(long amount, long timestamp) {
+    public Transaction() {
+        this(0, 0);
+    }
+
+    public Transaction(double amount, long timestamp) {
         this.amount = amount;
         this.timestamp = timestamp;
     }
