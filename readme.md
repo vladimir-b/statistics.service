@@ -11,6 +11,8 @@ Body
 }
 
 Returns empty body with either 201 or 204.
+201 is returned when transaction succeeded.
+204 is returned when transaction has invalid timestamp. for e.g. in a future.
 
 where:
 
@@ -19,13 +21,13 @@ where:
 
 GET /statistics
 
-This is the main endpoint of this task, this endpoint is executed in constant time nad memory (O(1)).
+This is the main endpoint of this task, this endpoint is executed in constant time and memory (O(1)).
 It returns the statistics, which related to the transactions which happened in the last 60 seconds.
 
 Returns:
 
 {
-    "sun": 1000,
+    "sum": 1000,
     "avg": 100,
     "max": 200,
     "min": 50,
@@ -38,7 +40,7 @@ where:
 * avg is a double specifying the average amount of transaction values in the last 60 second.
 * max is a double specifying single highest transaction value in the last 60 seconds.
 * min is a double specifying single lowest transaction value in the last 60 second.
-* count is a long specifying the total amount of transaction happened in the last 60 seconds.
+* count is a long specifying the total count of transaction happened in the last 60 seconds.
 
 To run service locally:
 mvn spring-boot:run
