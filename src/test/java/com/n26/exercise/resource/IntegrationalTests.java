@@ -1,4 +1,4 @@
-package com.n26.exercise;
+package com.n26.exercise.resource;
 
 import com.n26.exercise.model.Transaction;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class StatisticsApplicationTests {
+public class IntegrationalTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
